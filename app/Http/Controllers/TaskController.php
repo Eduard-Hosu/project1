@@ -10,6 +10,8 @@ use Illuminate\Support\Facades\Auth;
 
 class TaskController extends Controller
 {
+    private static $status = ['toDo', 'inProgress', 'done'];
+
     /**
      * Display a listing of the resource.
      *
@@ -55,15 +57,15 @@ class TaskController extends Controller
      */
     public function show(Task $task)
     {
-        // dd($task->id);
-        //Comment directly on task
+        $array = static::$status;
+        
         if (Auth::user()->is_admin == 1) {
             $comments = Comment::latest()->where('task_id', $task->id)->with(['user'])->paginate(10);
         } else {
             $comments = Comment::latest()->with(['user'])->where('user_id', Auth::user()->id)->paginate(10);
-        }
+        }   
 
-        return view('tasks.show', compact('task', 'comments'));
+        return view('tasks.show', compact('task', 'comments', 'array'));
     }
 
     /**
@@ -115,5 +117,17 @@ class TaskController extends Controller
     
         return redirect('tasks.index')
             ->with('success', 'The task was successfully deleted');
+    }
+
+    /**
+     * Change task status
+     */
+    public function changeTaskStatus(Request $request)
+    {
+        $task = Task::find($request->task_id);
+        $task->status = $request->status;
+        $task->save();
+  
+        return response()->json(['success'=>'Status changed successfully.']);
     }
 }

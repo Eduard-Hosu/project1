@@ -42,6 +42,18 @@
 
             <div class="col-xs-12 col-sm-12 col-md-12">
                 <div class="form-group">
+                    <strong>Status:</strong>
+                    <select data-id="{{ $task->id }}" name='status' class="custom-select">
+                        <option value='{{ $task->status }}'>{{ $task->status }}</option>
+                        @foreach ($array as $status)
+                            <option value='{{ $status }}'>{{ $status }}</option>
+                        @endforeach
+                    </select>
+                </div>
+            </div>
+
+            <div class="col-xs-12 col-sm-12 col-md-12">
+                <div class="form-group">
                     <strong>Assigned:</strong>
                     {{ $task->user->name }}
                 </div>
@@ -79,4 +91,22 @@
     @endif
     
 </div>
+<script>
+    $(function() {
+        $('.custom-select').change(function() {
+            var status = $(this).val();
+            var task_id = $(this).data('id');
+           
+            $.ajax({
+                type: "GET",
+                dataType: "json",
+                url:"{{ route('taskStatus.get') }}",
+                data: {'status': status, 'task_id': task_id},
+                success: function(data){
+                    console.log(data.success)
+                }
+            });
+        })
+    })
+</script>
 @endsection

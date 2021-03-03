@@ -38,6 +38,7 @@ Route::delete('/projects/destroy/{project}', [ProjectController::class, 'destroy
 
 //Tasks
 Route::resource('tasks', TaskController::class);
+Route::get('/changeTaskStatus', [TaskController::class, 'changeTaskStatus'])->name('taskStatus.get');
 
 //Comments
 Route::resource('comments', CommentController::class);
