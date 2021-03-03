@@ -14,7 +14,7 @@
                 {{ session()->get('success') }}  
                 </div><br />
             @endif
-            @if (!$projects)
+            @if ($projects->isEmpty())
                 <h1>No projects, yet!</h1>
             @else
                 <table class="table table-striped">

@@ -14,7 +14,7 @@
                 {{ session()->get('success') }}  
                 </div><br />
             @endif
-            @if (!$tasks)
+            @if (empty($tasks->id))
                 <h1>No tasks, yet</h1>
             @else
                 <table class="table table-striped">
